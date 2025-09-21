@@ -1,19 +1,28 @@
 class Solution {
     public int thirdMax(int[] nums) {
-        TreeSet<Integer> set = new TreeSet<>();
+        Long first = null, second = null, third = null;
         
         for (int num : nums) {
-            set.add(num); 
+            long n = num;
             
-            if (set.size() > 3) {
-                set.pollFirst(); 
+            if ((first != null && n == first) ||
+                (second != null && n == second) ||
+                (third != null && n == third)) {
+                continue; // skip duplicates
+            }
+            
+            if (first == null || n > first) {
+                third = second;
+                second = first;
+                first = n;
+            } else if (second == null || n > second) {
+                third = second;
+                second = n;
+            } else if (third == null || n > third) {
+                third = n;
             }
         }
         
-        if (set.size() == 3) {
-            return set.first();
-        }
-        
-        return set.last();
+        return third == null ? first.intValue() : third.intValue();
     }
 }
