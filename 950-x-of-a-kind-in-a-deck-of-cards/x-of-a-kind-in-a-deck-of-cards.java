@@ -1,16 +1,18 @@
 class Solution {
-    public boolean hasGroupsSizeX(int[] deck) {
-        Map<Integer, Integer> countMap = new HashMap<>();
+     public boolean hasGroupsSizeX(int[] deck) {
+        int[] count = new int[10000];
         for (int card : deck) {
-            countMap.put(card, countMap.getOrDefault(card, 0) + 1);
+            count[card]++;
         }
 
         int gcd = -1;
-        for (int count : countMap.values()) {
-            if (gcd == -1) {
-                gcd = count;
-            } else {
-                gcd = findGCD(gcd, count);
+        for (int c : count) {
+            if (c > 0) {
+                if (gcd == -1) {
+                    gcd = c;
+                } else {
+                    gcd = findGCD(gcd, c);
+                }
             }
         }
 
