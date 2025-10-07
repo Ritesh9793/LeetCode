@@ -1,22 +1,29 @@
 class Solution {
     public String[] findRestaurant(String[] list1, String[] list2) {
-         Map<String, Integer> indexMap = IntStream.range(0, list1.length)
-                .boxed()
-                .collect(Collectors.toMap(i -> list1[i], i -> i));
+         Map<String, Integer> map = new HashMap<>();
+        
+        for (int i = 0; i < list1.length; i++) {
+            map.put(list1[i], i);
+        }
 
-        Map<String, Integer> commonMap = IntStream.range(0, list2.length)
-                .filter(j -> indexMap.containsKey(list2[j]))
-                .boxed()
-                .collect(Collectors.toMap(
-                        j -> list2[j],
-                        j -> j + indexMap.get(list2[j])
-                ));
+        List<String> result = new ArrayList<>();
+        int minSum = Integer.MAX_VALUE;
 
-        int minSum = commonMap.values().stream().min(Integer::compare).orElse(Integer.MAX_VALUE);
+        for (int j = 0; j < list2.length; j++) {
+            if (map.containsKey(list2[j])) {
+                int i = map.get(list2[j]);
+                int sum = i + j;
 
-        return commonMap.entrySet().stream()
-                .filter(entry -> entry.getValue() == minSum)
-                .map(Map.Entry::getKey)
-                .toArray(String[]::new);
+                if (sum < minSum) {
+                    result.clear();
+                    result.add(list2[j]);
+                    minSum = sum;
+                } else if (sum == minSum) {
+                    result.add(list2[j]);
+                }
+            }
+        }
+
+        return result.toArray(new String[0]);
     }
 }
